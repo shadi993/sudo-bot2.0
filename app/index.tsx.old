@@ -1,0 +1,21 @@
+import Link from 'next/link';
+
+export default function Home() {
+  const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI}&response_type=code&scope=identify email`;
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="text-center">
+        <h1 className="text-6xl font-extrabold mb-4 text-neon">Login with Discord</h1>
+        <p className="text-lg mb-8 text-gray-400">
+          Connect and manage your server with ease.
+        </p>
+        <Link href={discordAuthUrl} legacyBehavior>
+          <a className="px-8 py-4 bg-neon text-black rounded-md hover:bg-white transition-all">
+            Login
+          </a>
+        </Link>
+      </div>
+    </div>
+  );
+}
