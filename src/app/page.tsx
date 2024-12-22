@@ -30,13 +30,6 @@ const HomePage = () => {
         >
           Login with Discord
         </Button>
-
-        {/* Link to dashboard */}
-        <Link href="/dashboard" legacyBehavior>
-          <a className="mt-4 text-lg text-[#d1294e] underline hover:text-red-300">
-            Go to Dashboard
-          </a>
-        </Link>
       </div>
     </div>
   );

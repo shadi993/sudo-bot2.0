@@ -1,0 +1,19 @@
+{
+    "name": "Dev Container",
+    "dockerComposeFile": [
+      "../docker-compose-dev.yml"
+    ],
+    "service": "app", // Replace 'app' with the name of your primary service in the docker-compose-dev.yml
+    "workspaceFolder": "/app",
+    "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-azuretools.vscode-docker"
+    ],
+    "forwardPorts": [3000], // Forward the ports your app uses, adjust as needed
+    "remoteUser": "node" // Replace with the user set up in your Dockerfile or container
+  }
+  
