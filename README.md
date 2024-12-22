@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SudoBot v2
 
-## Getting Started
+This is a Discord bot that manages communities. It was written for the [sudo.gay](https://sudo.gay/) Discord community.
 
-First, run the development server:
+## Installation (for production)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Installation pre-requisites
+
+### Create a Discord application and Bot
+
+TODO
+
+### Invite the bot to your server
+
+TODO
+
+### Installation
+
+- Create an .env file using the .env-prod-example as a template
+- Substitute the DISCORD_SECRET and BASE_URL for your installation
+- Start sudobot
+
+```
+cp .env-prod-example .env
+# Edit the .env file as required
+docker compose pull
+docker compose up -d
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Login and set up your bot to be useful
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+TODO - SudoBot has just enough information to connect itself to your server. From there, you need to use the
+web interface to set up the features of SudoBot to do things.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development
 
-## Learn More
+The project is under the MIT open source license. We would welcome contributions and feedback from the community.
 
-To learn more about Next.js, take a look at the following resources:
+Please read the CONTRIBUTING.md file for more information on contributor guidelines. The rest of this
+section will be to stand up your own development environment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+First step - follow the instructions above to create your own Discord application and bot. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Specifically you will need the following environment variables ready to use in your development .env file
 
-## Deploy on Vercel
+```
+DISCORD_SECRET=xxx
+TODO
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The start development, simply run these commands. They will build the docker image and stand up a development
+environment for you to view on http://localhost:3000
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+docker compose -f docker-compose-dev.yml build
+docker compose -f docker-compose-dev.yml up -d
+docker compose logs -f
+```
+
+### Before committing and creating a pull request
+
+We have a pre-commit hook to run the necessary linters, test suite and coverage checks. You should install
+the *pre-commit* file so this file is run on every commit to ensure clean code.
