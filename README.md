@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SudoBot v2
 
-## Getting Started
+This is a Discord bot that manages communities. It was written for the [sudo.gay](https://sudo.gay/) Discord community.
 
-First, run the development server:
+## Installation (for production)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Installation pre-requisites
+
+Production and local development require Docker Engine to be installed.
+
+You must be an owner/administrator of at least one server for this to be useful.
+
+### Create a Discord application and Bot
+
+- Go to the [Discord Developer portal](https://discord.com/developers/applications)
+- Click the *New Application* button at the top right
+    ![Discord application page](docs/images/screen-new-app.png)
+- Give the application a name
+    ![Discord create app modal](docs/images/screen-create-app.png)
+- Click the OAuth menu item and configure the a redirect URI. Don't forget to save the page!
+    - For development http://localhost:3000/api/oauth
+    - For production https://YOURSERVER/api/oauth
+    ![Discord OAuth page](docs/images/screen-bot-settings.png)
+- Click the *Reset Secret* button and copy the new secret that you are given. This will become DISCORD_CLIENT_SECRET in your environment file
+- Copy the Client ID - this will become DISCORD_CLIENT_ID in your environment file.
+- Click the Bot menu item, and configure the bot settings (you will need to enable several Intents as noted below)
+    ![Discord Bot page](docs/images/screen-bot-settings2.png)
+- Click the *Reset Token* button and copy the new token that you receive. This will become your DISCORD_BOT_TOKEN environment variable.
+
+### Installation
+
+- Create an .env file using the .env-prod-example as a template
+- Enter your values for DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET and DISCORD_BOT_TOKEN from the above procedure.
+- Start sudobot using docker compose
+
+```
+cp .env-prod-example .env
+# Edit the .env file as required
+docker compose pull
+docker compose up -d
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Login and set up your bot to be useful
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Open the Bot web interface and login with your Discord.
+- You will get a server list of your servers. On first use you will want to invite the bot to one of your servers.
+- Further help, examples and tutorials are covered in the docs/ directory.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Development
 
-## Learn More
+The project is under the MIT open source license. We would welcome contributions and feedback from the community.
 
-To learn more about Next.js, take a look at the following resources:
+Please read the CONTRIBUTING.md file for more information on contributor guidelines. The rest of this
+section will be to stand up your own development environment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+First step - follow the instructions above to create your own Discord application and bot. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Copy the .env-dev-example file to .env and edit your new .env file. You will need to define your DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET and DISCORD_BOT_TOKEN variables at a minimum.
 
-## Deploy on Vercel
+The start development, simply run these commands. They will build the docker image and stand up a development
+environment for you to view on http://localhost:3000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+docker compose -f docker-compose-dev.yml build
+docker compose -f docker-compose-dev.yml up -d
+docker compose -f docker-compose-dev.yml logs -f
+```
