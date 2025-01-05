@@ -1,6 +1,5 @@
 "use client";
 
-import session from "express-session";
 import { signIn, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { hasAdminPermissions } from "src/lib/utils";
@@ -15,42 +14,48 @@ export default function ServersList() {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "authenticated" && session?.accessToken) {
-      fetch("https://discord.com/api/users/@me/guilds", {
-        headers: {
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          const filteredServers = data.filter((guild: any) =>
+    async function fetchServers() {
+      try {
+        if (status === "authenticated" && session?.accessToken) {
+          // Fetch user guilds
+          const userGuildsResponse = await fetch(
+            "https://discord.com/api/users/@me/guilds",
+            {
+              headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+              },
+            }
+          );
+
+          if (!userGuildsResponse.ok) {
+            throw new Error("Failed to fetch user guilds");
+          }
+
+          const userGuilds = await userGuildsResponse.json();
+          const filteredServers = userGuilds.filter((guild: any) =>
             hasAdminPermissions(guild.permissions)
           );
           setServers(filteredServers);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error fetching guilds:", err);
-          setLoading(false); // Allow retry on error
-        });
 
-      // Fetch bot guilds
-      fetch("/api/bot-guilds", {
-        headers: {
-          Authorization: `Bot ${session.accessToken}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Bot guilds:", data);
-          setBotGuilds(data);
-        })
-        .catch((err) => console.error("Error fetching bot guilds:", err))
-        .finally(() => setLoading(false));        
+          // Fetch bot guilds
+          const botGuildsResponse = await fetch("/api/bot-guilds");
+          if (!botGuildsResponse.ok) {
+            throw new Error("Failed to fetch bot guilds");
+          }
 
-    } else if (status === "unauthenticated") {
-      signIn();
+          const botGuildsData = await botGuildsResponse.json();
+          setBotGuilds(botGuildsData);
+        } else if (status === "unauthenticated") {
+          signIn();
+        }
+      } catch (error) {
+        console.error("Error fetching servers:", error);
+      } finally {
+        setLoading(false);
+      }
     }
+
+    fetchServers();
   }, [session, status]);
 
   const isBotInstalled = (serverId: string) => {
@@ -106,7 +111,7 @@ export default function ServersList() {
               Install Bot
             </button>
           )}
-          </li>
+        </li>
       ))}
     </ul>
   );
